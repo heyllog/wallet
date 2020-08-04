@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
 
 const Card = styled.div`
   margin: 0.7rem 1rem 0 1rem;
@@ -66,30 +67,46 @@ const BottomSide = styled.div`
   div:nth-of-type(2) {
     margin-left: auto;
     text-align: right;
-    
+
     p:nth-of-type(1) {
       color: #10c668;
     }
   }
 `;
 
-function CurrencyCard({ children: icon }) {
+const formatBalance = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+
+function CurrencyCard({ children: icon, name }) {
+  const wallet = useSelector((state) => state.wallet);
+
   return (
     <Card>
       <TopSide>
         {icon}
         <div>
-          <p>BTC</p>
-          <p>Bitcoin</p>
+          <p>{name.short}</p>
+          <p>{name.full}</p>
         </div>
         <div>
-          <p>0.241232341</p>
-          <p>$1,238.62</p>
+          <p>{wallet.cryptoWallet[name.short]}</p>
+          <p>
+            {wallet.readyToUse
+              ? formatBalance.format(wallet.dollarWallet[name.short])
+              : 'Loading...'}
+          </p>
         </div>
       </TopSide>
       <BottomSide>
         <div>
-          <p>$6,752.54</p>
+          <p>
+            {wallet.readyToUse
+              ? formatBalance.format(wallet.exchange[name.short]['USD'])
+              : 'Loading...'}
+          </p>
           <p>Price</p>
         </div>
         <div>

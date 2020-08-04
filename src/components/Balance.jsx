@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
 
 const BalanceBadge = styled.div`
   margin-bottom: 1.5rem;
@@ -31,11 +32,27 @@ const BalanceBadge = styled.div`
   }
 `;
 
+const formatBalance = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+
 function Balance() {
+  const wallet = useSelector((state) => state.wallet);
+
   return (
     <BalanceBadge>
       <p>Your total balance</p>
-      <p>$ 1,632.95</p>
+      <p>
+        {wallet.readyToUse
+          ? formatBalance.format(
+              Object.values(wallet.dollarWallet).reduce(
+                (accumulator, currentValue) => accumulator + currentValue
+              )
+            )
+          : 'Loading...'}
+      </p>
       <p>24h Changes</p>
       <p>+ $37.55 &uarr;</p>
     </BalanceBadge>

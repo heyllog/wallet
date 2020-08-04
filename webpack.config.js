@@ -9,7 +9,7 @@ module.exports = {
 
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
   },
 
   plugins: [
@@ -26,6 +26,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
     port: 3000,
+    host: '192.168.1.33',
   },
 
   resolve: {

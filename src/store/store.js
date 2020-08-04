@@ -3,12 +3,13 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 
 // Reducers
+import walletReducer from './reducers/walletReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   combineReducers({
-    // Reducers
+    wallet: walletReducer,
   }),
   applyMiddleware(sagaMiddleware)
 );
