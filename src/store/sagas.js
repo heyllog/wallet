@@ -6,7 +6,8 @@ function* workerLoadData() {
   try {
     const response = yield call(
       fetch,
-      'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP&tsyms=USD',
+      // 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP&tsyms=USD',
+      'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP&tsyms=USD',
       {
         signal: controller.signal,
       }
@@ -14,8 +15,11 @@ function* workerLoadData() {
 
     if (response.ok) {
       const json = yield response.json();
-      yield put(putData(json));
+      yield put(putData(json['RAW']));
     }
+  } catch (e) {
+    // TODO обработка ошибок
+    console.error(e);
   } finally {
     if (yield cancelled()) {
       controller.abort();

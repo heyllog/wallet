@@ -12,6 +12,8 @@ import RippleIcon from '../components/icons/RippleIcon';
 const BalanceMain = styled.div``;
 
 function Main() {
+  const wallet = useSelector((state) => state.wallet);
+
   const cryptos = [
     { name: { short: 'BTC', full: 'Bitcoin' }, icon: <BitcoinIcon /> },
     { name: { short: 'ETH', full: 'Ethereum' }, icon: <EthereumIcon /> },
@@ -23,7 +25,14 @@ function Main() {
       <Header />
       <Balance />
       {cryptos.map((crypto, index) => (
-        <CurrencyCard key={index} name={crypto.name}>
+        <CurrencyCard
+          key={index}
+          name={crypto.name}
+          price={wallet.readyToUse && wallet.prices[crypto.name.short]}
+          coins={wallet.cryptoWallet[crypto.name.short]}
+          dollars={wallet.dollarWallet[crypto.name.short]}
+          changes={wallet.readyToUse && wallet.changePercentage[crypto.name.short]}
+        >
           {crypto.icon}
         </CurrencyCard>
       ))}

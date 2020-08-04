@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
@@ -28,7 +28,7 @@ const BalanceBadge = styled.div`
   p:nth-of-type(4) {
     font-size: 0.8rem;
     font-weight: 400;
-    color: #10c668;
+    color: ${(props) => props.color};
   }
 `;
 
@@ -38,11 +38,35 @@ const formatBalance = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 });
 
+const formatChanges = (value) => {
+  let formattedValue = formatBalance.format(value.toFixed(2));
+  formattedValue = formattedValue.split('');
+
+  if (value >= 0) formattedValue.unshift('+');
+
+  formattedValue.splice(1, 0, ' ');
+  return formattedValue;
+};
+
 function Balance() {
   const wallet = useSelector((state) => state.wallet);
 
+  const [changes, setChanges] = useState(null);
+
+  useEffect(() => {
+    if (wallet.readyToUse) {
+      setChanges(
+        Object.values(wallet.changeDollars).reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        )
+      );
+    }
+  }, [wallet]);
+
   return (
-    <BalanceBadge>
+    <BalanceBadge
+      color={changes !== 'Loading...' ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}
+    >
       <p>Your total balance</p>
       <p>
         {wallet.readyToUse
@@ -54,7 +78,10 @@ function Balance() {
           : 'Loading...'}
       </p>
       <p>24h Changes</p>
-      <p>+ $37.55 &uarr;</p>
+      <p>
+        {changes ? formatChanges(changes) : 'Loading...'}
+        {changes && changes > 0 ? <span> &uarr;</span> : <span> &darr;</span>}
+      </p>
     </BalanceBadge>
   );
 }

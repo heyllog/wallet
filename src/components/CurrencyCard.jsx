@@ -22,7 +22,7 @@ const TopSide = styled.div`
   line-height: 1.2;
   border-bottom: 1px solid rgba(136, 137, 145, 0.15);
 
-  div {
+  section {
     margin-left: 0.4rem;
 
     p:nth-of-type(1) {
@@ -37,7 +37,7 @@ const TopSide = styled.div`
     }
   }
 
-  div:nth-of-type(2) {
+  section:nth-of-type(2) {
     margin-left: auto;
     text-align: right;
   }
@@ -49,7 +49,7 @@ const BottomSide = styled.div`
   padding-top: 0.8rem;
   line-height: 1.3;
 
-  div {
+  section {
     margin-left: 0.5rem;
 
     p:nth-of-type(1) {
@@ -64,12 +64,12 @@ const BottomSide = styled.div`
     }
   }
 
-  div:nth-of-type(2) {
+  section:nth-of-type(2) {
     margin-left: auto;
     text-align: right;
 
     p:nth-of-type(1) {
-      color: #10c668;
+      color: ${(props) => props.color};
     }
   }
 `;
@@ -80,39 +80,40 @@ const formatBalance = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 });
 
-function CurrencyCard({ children: icon, name }) {
+const formatPercentage = (value) => {
+  let formattedValue = value.toFixed(2).split('');
+  if (value >= 0) {
+    formattedValue.unshift('+');
+  }
+  formattedValue.splice(1, 0, ' ');
+  return formattedValue.join('');
+};
+
+function CurrencyCard({ children: icon, name, price, coins, dollars, changes }) {
   const wallet = useSelector((state) => state.wallet);
 
   return (
     <Card>
       <TopSide>
         {icon}
-        <div>
+        <section>
           <p>{name.short}</p>
           <p>{name.full}</p>
-        </div>
-        <div>
-          <p>{wallet.cryptoWallet[name.short]}</p>
-          <p>
-            {wallet.readyToUse
-              ? formatBalance.format(wallet.dollarWallet[name.short])
-              : 'Loading...'}
-          </p>
-        </div>
+        </section>
+        <section>
+          <p>{coins}</p>
+          <p>{wallet.readyToUse ? formatBalance.format(dollars) : 'Loading...'}</p>
+        </section>
       </TopSide>
-      <BottomSide>
-        <div>
-          <p>
-            {wallet.readyToUse
-              ? formatBalance.format(wallet.exchange[name.short]['USD'])
-              : 'Loading...'}
-          </p>
+      <BottomSide color={wallet.readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}>
+        <section>
+          <p>{wallet.readyToUse ? formatBalance.format(price) : 'Loading...'}</p>
           <p>Price</p>
-        </div>
-        <div>
-          <p>+ 2.75%</p>
+        </section>
+        <section>
+          <p>{wallet.readyToUse ? formatPercentage(changes) : 'Loading...'}%</p>
           <p>Profit/Loss</p>
-        </div>
+        </section>
       </BottomSide>
     </Card>
   );
