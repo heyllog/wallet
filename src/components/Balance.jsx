@@ -65,7 +65,7 @@ function Balance() {
 
   return (
     <BalanceBadge
-      color={changes !== 'Loading...' ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}
+      color={wallet.readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}
     >
       <p>Your total balance</p>
       <p>
@@ -80,7 +80,7 @@ function Balance() {
       <p>24h Changes</p>
       <p>
         {changes ? formatChanges(changes) : 'Loading...'}
-        {changes && changes > 0 ? <span> &uarr;</span> : <span> &darr;</span>}
+        {wallet.readyToUse && (changes > 0 ? <span> &uarr;</span> : <span> &darr;</span>)}
       </p>
     </BalanceBadge>
   );

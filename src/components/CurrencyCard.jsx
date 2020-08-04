@@ -111,7 +111,7 @@ function CurrencyCard({ children: icon, name, price, coins, dollars, changes }) 
           <p>Price</p>
         </section>
         <section>
-          <p>{wallet.readyToUse ? formatPercentage(changes) : 'Loading...'}%</p>
+          <p>{wallet.readyToUse ? `${formatPercentage(changes)}%` : 'Loading...'}</p>
           <p>Profit/Loss</p>
         </section>
       </BottomSide>
