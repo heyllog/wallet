@@ -7,6 +7,10 @@ import DetailCurrencyCard from './DetailCurrencyCard';
 
 const List = styled.div``;
 const Info = styled.div``;
+const EmptyBox = styled.div`
+  min-width: 1.5rem;
+  opacity: 0;
+`;
 
 const DetailCrypto = styled.div`
   ${Info}, ${List} {
@@ -41,6 +45,7 @@ function DetailCryptoList({ pageName }) {
             {wallet.cryptos[crypto].icon}
           </DetailCurrencyCard>
         ))}
+        <EmptyBox />
       </List>
       <Info>
         <CryptoInfo
