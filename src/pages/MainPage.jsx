@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Balance from '../components/Balance';
 import CurrencyCard from '../components/CurrencyCard';
 
-function Main() {
+function MainPage() {
   const wallet = useSelector((state) => state.wallet);
 
   return (
@@ -28,4 +28,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default MainPage;

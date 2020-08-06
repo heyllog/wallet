@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Card = styled.div`
   margin: 0.7rem 1rem 0 1rem;
@@ -8,9 +9,13 @@ const Card = styled.div`
   background-color: #363642;
   border-radius: 0.2rem;
 
+  a {
+    text-decoration: none;
+  }
+
   svg {
-    width: 25px;
-    height: 25px;
+    width: 1.6rem;
+    height: 1.6rem;
     margin-left: 0.5rem;
   }
 `;
@@ -93,29 +98,32 @@ const formatPercentage = (value) => {
 function CurrencyCard({ children: icon, name, price, coins, dollars, changes }) {
   const wallet = useSelector((state) => state.wallet);
 
+
   return (
     <Card>
-      <TopSide>
-        {icon}
-        <section>
-          <p>{name.short}</p>
-          <p>{name.full}</p>
-        </section>
-        <section>
-          <p>{coins}</p>
-          <p>{wallet.readyToUse ? formatBalance.format(dollars) : 'Loading...'}</p>
-        </section>
-      </TopSide>
-      <BottomSide color={wallet.readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}>
-        <section>
-          <p>{wallet.readyToUse ? formatBalance.format(price) : 'Loading...'}</p>
-          <p>Price</p>
-        </section>
-        <section>
-          <p>{wallet.readyToUse ? `${formatPercentage(changes)}%` : 'Loading...'}</p>
-          <p>Profit/Loss</p>
-        </section>
-      </BottomSide>
+      <Link to={name.short}>
+        <TopSide>
+          {icon}
+          <section>
+            <p>{name.short}</p>
+            <p>{name.full}</p>
+          </section>
+          <section>
+            <p>{coins}</p>
+            <p>{wallet.readyToUse ? formatBalance.format(dollars) : 'Loading...'}</p>
+          </section>
+        </TopSide>
+        <BottomSide color={wallet.readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}>
+          <section>
+            <p>{wallet.readyToUse ? formatBalance.format(price) : 'Loading...'}</p>
+            <p>Price</p>
+          </section>
+          <section>
+            <p>{wallet.readyToUse ? `${formatPercentage(changes)}%` : 'Loading...'}</p>
+            <p>Profit/Loss</p>
+          </section>
+        </BottomSide>
+      </Link>
     </Card>
   );
 }

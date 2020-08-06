@@ -1,20 +1,26 @@
 import React, { useEffect } from 'react';
-import { useRoutes } from 'react-router';
-import styled from '@emotion/styled';
-import { Global, css } from '@emotion/core';
-import Main from './pages/Main';
 import { useDispatch } from 'react-redux';
+import { useRoutes } from 'react-router-dom';
+import { Global, css } from '@emotion/core';
+import styled from '@emotion/styled';
+
+import MainPage from './pages/MainPage';
+import DetailPage from './pages/DetailPage';
 import { cancelLoadData, loadData } from './store/reducers/walletReducer';
 
 const routesConfig = [
   {
     path: '/',
-    element: <Main />,
+    element: <MainPage />,
+  },
+  {
+    path: ':name',
+    element: <DetailPage />,
   },
 ];
 
 const GLOBAL = css`
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400&display=swap');
 
   * {
     margin: 0;
