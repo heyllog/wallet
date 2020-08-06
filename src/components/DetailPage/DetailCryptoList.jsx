@@ -1,17 +1,21 @@
 import React from 'react';
-import DetailCurrencyCard from './DetailCurrencyCard';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
+
 import CryptoInfo from './CryptoInfo';
+import DetailCurrencyCard from './DetailCurrencyCard';
+
+const List = styled.div``;
+const Info = styled.div``;
 
 const DetailCrypto = styled.div`
-  & > section {
+  ${Info}, ${List} {
     margin: 0 2rem 3rem 2rem;
     line-height: 1.2;
     font-weight: 400;
   }
 
-  & > section:nth-of-type(1) {
+  ${List} {
     display: flex;
     margin-right: 0;
     margin-bottom: 2rem;
@@ -24,7 +28,7 @@ function DetailCryptoList({ pageName }) {
 
   return (
     <DetailCrypto>
-      <section>
+      <List>
         {Object.keys(wallet.cryptoWallet).map((crypto, index) => (
           <DetailCurrencyCard
             key={index}
@@ -37,8 +41,8 @@ function DetailCryptoList({ pageName }) {
             {wallet.cryptos[crypto].icon}
           </DetailCurrencyCard>
         ))}
-      </section>
-      <section>
+      </List>
+      <Info>
         <CryptoInfo
           name={wallet.cryptos[pageName].name}
           price={wallet.readyToUse && wallet.prices[pageName]}
@@ -51,7 +55,7 @@ function DetailCryptoList({ pageName }) {
         >
           {wallet.cryptos[pageName].icon}
         </CryptoInfo>
-      </section>
+      </Info>
     </DetailCrypto>
   );
 }

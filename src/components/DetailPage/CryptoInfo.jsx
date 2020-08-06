@@ -3,6 +3,25 @@ import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import formatPercentage from '../../formatters/formatPercentage';
+
+const LeftSide = styled.div`
+  margin-left: 1rem;
+
+  h2 {
+    color: #888991;
+  }
+`;
+
+const RightSide = styled.div`
+  text-align: right;
+  margin-left: auto;
+
+  h2 {
+    color: ${(props) => props.color};
+  }
+`;
+
 const Info = styled.div`
   display: flex;
   align-items: center;
@@ -13,38 +32,17 @@ const Info = styled.div`
     height: ${(props) => props.iconSize};
   }
 
-  section {
-    margin-left: 1rem;
-
-    p:nth-of-type(1) {
+  ${LeftSide}, ${RightSide} {
+    h1 {
       font-size: ${(props) => props.fontTop};
       color: #ffffff;
     }
 
-    p:nth-of-type(2) {
+    h2 {
       font-size: ${(props) => props.fontBottom};
-      color: #888991;
-    }
-  }
-
-  section:nth-of-type(2) {
-    text-align: right;
-    margin-left: auto;
-
-    p:nth-of-type(2) {
-      color: ${(props) => props.color};
     }
   }
 `;
-
-const formatPercentage = (value) => {
-  let formattedValue = value.toFixed(2).split('');
-  if (value >= 0) {
-    formattedValue.unshift('+');
-  }
-  formattedValue.splice(1, 0, ' ');
-  return formattedValue.join('') + '%';
-};
 
 function CryptoInfo({
   children: icon,
@@ -60,21 +58,20 @@ function CryptoInfo({
 
   return (
     <Info
-      color={readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}
       active={name.full === pageName.toUpperCase()}
       fontTop={fontTop}
       fontBottom={fontBottom}
       iconSize={iconSize}
     >
       {icon}
-      <section>
-        <p>{name.short}</p>
-        <p>{name.full}</p>
-      </section>
-      <section>
-        <p>{coins}</p>
-        <p>{readyToUse ? formatPercentage(changes) : 'Loading...'}</p>
-      </section>
+      <LeftSide>
+        <h1>{name.short}</h1>
+        <h2>{name.full}</h2>
+      </LeftSide>
+      <RightSide color={readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}>
+        <h1>{coins}</h1>
+        <h2>{readyToUse ? formatPercentage(changes) : 'Loading...'}</h2>
+      </RightSide>
     </Info>
   );
 }

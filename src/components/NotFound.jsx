@@ -6,7 +6,7 @@ const WrongRoute = styled.div`
   height: 100vh;
   align-items: center;
   justify-content: center;
-  
+
   span {
     color: #ffffff;
     font-size: 2rem;

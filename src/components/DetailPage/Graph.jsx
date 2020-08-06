@@ -1,5 +1,5 @@
 import React from 'react';
-import { AreaChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Area } from 'recharts';
+import { AreaChart, XAxis, YAxis, CartesianGrid, Area } from 'recharts';
 import styled from '@emotion/styled';
 
 const data = [

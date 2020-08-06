@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from '@emotion/styled';
+
 import SearchIcon from './icons/SearchIcon';
 import NotificationIcon from './icons/NotificationIcon';
-import styled from '@emotion/styled';
 
 const TopBar = styled.header`
   margin: 2rem 2rem 1.4rem 2rem;
