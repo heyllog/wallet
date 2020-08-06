@@ -1,3 +1,9 @@
+import BitcoinIcon from '../../components/icons/BitcoinIcon';
+import EthereumIcon from '../../components/icons/EthereumIcon';
+import RippleIcon from '../../components/icons/RippleIcon';
+import React from 'react';
+import LitecoinIcon from '../../components/icons/LitecoinIcon';
+
 export const LOAD_DATA = 'LOAD_DATA';
 export const CANCEL_LOAD_DATA = 'CANCEL_LOAD_DATA';
 export const PUT_DATA = 'PUT_DATA';
@@ -22,42 +28,38 @@ export const cancelLoadData = () => {
 };
 
 const initialState = {
-  cryptoWallet: { BTC: 0.2415263, ETH: 7.2415263, XRP: 165.24152 },
-  dollarWallet: { BTC: null, ETH: null, XRP: null },
-  changeDollars: { BTC: null, ETH: null, XRP: null },
-  prices: { BTC: null, ETH: null, XRP: null },
-  changePercentage: { BTC: null, ETH: null, XRP: null },
+  cryptos: {
+    BTC: { name: { short: 'BTC', full: 'Bitcoin' }, icon: <BitcoinIcon /> },
+    ETH: { name: { short: 'ETH', full: 'Ethereum' }, icon: <EthereumIcon /> },
+    XRP: { name: { short: 'XRP', full: 'Ripple' }, icon: <RippleIcon /> },
+    LTC: { name: { short: 'LTC', full: 'Litecoin' }, icon: <LitecoinIcon /> },
+  },
+  cryptoWallet: { BTC: 0.2415263, ETH: 7.2415263, XRP: 165.24152, LTC: 3.27832 },
+  dollarWallet: {},
+  changeDollars: {},
+  prices: {},
+  changePercentage: {},
   readyToUse: false,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case PUT_DATA: {
-      const dollarWallet = {
-        BTC: action.payload['BTC']['USD']['PRICE'] * state.cryptoWallet['BTC'],
-        ETH: action.payload['ETH']['USD']['PRICE'] * state.cryptoWallet['ETH'],
-        XRP: action.payload['XRP']['USD']['PRICE'] * state.cryptoWallet['XRP'],
-      };
+      const dollarWallet = {};
+      const changePercentage = {};
+      const changeDollars = {};
+      const prices = {};
 
-      const changePercentage = {
-        BTC: action.payload['BTC']['USD']['CHANGEPCT24HOUR'],
-        ETH: action.payload['ETH']['USD']['CHANGEPCT24HOUR'],
-        XRP: action.payload['XRP']['USD']['CHANGEPCT24HOUR'],
-      };
-
-      const changeDollars = {
-        BTC: (changePercentage['BTC'] * dollarWallet['BTC']) / 100,
-        ETH: (changePercentage['ETH'] * dollarWallet['ETH']) / 100,
-        XRP: (changePercentage['XRP'] * dollarWallet['XRP']) / 100,
-      };
+      Object.keys(state.cryptoWallet).forEach((crypto) => {
+        prices[crypto] = action.payload[crypto]['USD']['PRICE'];
+        dollarWallet[crypto] = prices[crypto] * state.cryptoWallet[crypto];
+        changePercentage[crypto] = action.payload[crypto]['USD']['CHANGEPCT24HOUR'];
+        changeDollars[crypto] = (changePercentage[crypto] * dollarWallet[crypto]) / 100;
+      });
 
       return {
         ...state,
-        prices: {
-          BTC: action.payload['BTC']['USD']['PRICE'],
-          ETH: action.payload['ETH']['USD']['PRICE'],
-          XRP: action.payload['XRP']['USD']['PRICE'],
-        },
+        prices,
         dollarWallet,
         changeDollars,
         changePercentage,

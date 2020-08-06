@@ -26,7 +26,7 @@ const GLOBAL = css`
   body {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
-    background-color: rgb(42,42,52);
+    background-color: rgb(42, 42, 52);
   }
 `;
 

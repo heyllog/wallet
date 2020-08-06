@@ -1,13 +1,26 @@
-import { all, put, call, take, takeLatest, fork, cancel, cancelled } from 'redux-saga/effects';
+import {
+  all,
+  put,
+  call,
+  take,
+  takeLatest,
+  fork,
+  cancel,
+  cancelled,
+  select,
+} from 'redux-saga/effects';
 import { LOAD_DATA, CANCEL_LOAD_DATA, putData } from './reducers/walletReducer';
 
 function* workerLoadData() {
+  let cryptos = yield select((state) => state.wallet.cryptoWallet);
+  cryptos = Object.keys(cryptos).join(',');
   const controller = new AbortController();
+
   try {
     const response = yield call(
       fetch,
       // 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP&tsyms=USD',
-      'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP&tsyms=USD',
+      `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptos}&tsyms=USD`,
       {
         signal: controller.signal,
       }
