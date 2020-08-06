@@ -1,7 +1,6 @@
 import BitcoinIcon from '../../components/icons/BitcoinIcon';
 import EthereumIcon from '../../components/icons/EthereumIcon';
 import RippleIcon from '../../components/icons/RippleIcon';
-import React from 'react';
 import LitecoinIcon from '../../components/icons/LitecoinIcon';
 
 export const LOAD_DATA = 'LOAD_DATA';
@@ -29,10 +28,10 @@ export const cancelLoadData = () => {
 
 const initialState = {
   cryptos: {
-    BTC: { name: { short: 'BTC', full: 'Bitcoin' }, icon: <BitcoinIcon /> },
-    ETH: { name: { short: 'ETH', full: 'Ethereum' }, icon: <EthereumIcon /> },
-    XRP: { name: { short: 'XRP', full: 'Ripple' }, icon: <RippleIcon /> },
-    LTC: { name: { short: 'LTC', full: 'Litecoin' }, icon: <LitecoinIcon /> },
+    BTC: { name: { short: 'BTC', full: 'Bitcoin' }, icon: BitcoinIcon() },
+    ETH: { name: { short: 'ETH', full: 'Ethereum' }, icon: EthereumIcon() },
+    XRP: { name: { short: 'XRP', full: 'Ripple' }, icon: RippleIcon() },
+    LTC: { name: { short: 'LTC', full: 'Litecoin' }, icon: LitecoinIcon() },
   },
   cryptoWallet: { BTC: 0.2415263, ETH: 7.2415263, XRP: 165.24152, LTC: 3.27832 },
   dollarWallet: {},
