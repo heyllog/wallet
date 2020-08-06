@@ -35,7 +35,6 @@ const initialState = {
   },
   cryptoWallet: { BTC: 0.2415263, ETH: 7.2415263, XRP: 165.24152, LTC: 3.27832 },
   dollarWallet: {},
-  changeDollars: {},
   prices: {},
   changePercentage: {},
   readyToUse: false,
@@ -46,21 +45,18 @@ export default (state = initialState, action) => {
     case PUT_DATA: {
       const dollarWallet = {};
       const changePercentage = {};
-      const changeDollars = {};
       const prices = {};
 
       Object.keys(state.cryptoWallet).forEach((crypto) => {
         prices[crypto] = action.payload[crypto]['USD']['PRICE'];
         dollarWallet[crypto] = prices[crypto] * state.cryptoWallet[crypto];
         changePercentage[crypto] = action.payload[crypto]['USD']['CHANGEPCT24HOUR'];
-        changeDollars[crypto] = (changePercentage[crypto] * dollarWallet[crypto]) / 100;
       });
 
       return {
         ...state,
         prices,
         dollarWallet,
-        changeDollars,
         changePercentage,
         readyToUse: true,
       };

@@ -54,11 +54,17 @@ function Balance() {
   const [changes, setChanges] = useState(null);
 
   useEffect(() => {
+    // TODO как-то полегче это реализовать
     if (wallet.readyToUse) {
       setChanges(
-        Object.values(wallet.changeDollars).reduce(
-          (accumulator, currentValue) => accumulator + currentValue
-        )
+        Object.values(
+          Object.fromEntries(
+            Object.entries(wallet.dollarWallet).map(([key, value]) => [
+              key,
+              (value * wallet.changePercentage[key]) / 100,
+            ])
+          )
+        ).reduce((accumulator, currentValue) => accumulator + currentValue)
       );
     }
   }, [wallet]);
