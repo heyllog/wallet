@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 
 import formatBalance from '../formatters/formatBalance';
 import formatChanges from '../formatters/formatChanges';
+import ArrowUp from './icons/ArrowUp';
+import ArrowDown from './icons/ArrowDown';
 
 const BalanceBadge = styled.div`
   margin-bottom: 1.5rem;
@@ -15,6 +17,13 @@ const BalanceBadge = styled.div`
 const Changes = styled.p`
   font-size: 0.9rem;
   color: ${(props) => props.color};
+
+  svg {
+    width: 0.68rem;
+    height: 0.68rem;
+    margin-left: 0.3rem;
+    stroke: ${(props) => props.color};
+  }
 `;
 
 const TotalValue = styled.p`
@@ -34,18 +43,14 @@ function Balance() {
   const wallet = useSelector((state) => state.wallet);
 
   useEffect(() => {
-    // TODO как-то полегче это реализовать
     if (wallet.readyToUse) {
-      setChanges(
-        Object.values(
-          Object.fromEntries(
-            Object.entries(wallet.dollarWallet).map(([key, value]) => [
-              key,
-              (value * wallet.changePercentage[key]) / 100,
-            ])
-          )
-        ).reduce((accumulator, currentValue) => accumulator + currentValue)
-      );
+      let balance = 0;
+
+      for (let key in wallet.dollarWallet) {
+        balance += (wallet.dollarWallet[key] * wallet.changePercentage[key]) / 100;
+      }
+
+      setChanges(balance);
     }
   }, [wallet]);
 
@@ -64,7 +69,7 @@ function Balance() {
       <NormalText>24h Changes</NormalText>
       <Changes color={wallet.readyToUse ? (changes < 0 ? '#de6e6e' : '#10c668') : '#ffffff'}>
         {changes ? formatChanges(changes) : 'Loading...'}
-        {wallet.readyToUse && (changes > 0 ? <span> &uarr;</span> : <span> &darr;</span>)}
+        {wallet.readyToUse && (changes > 0 ? <ArrowUp /> : <ArrowDown />)}
       </Changes>
     </BalanceBadge>
   );

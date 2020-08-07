@@ -27,7 +27,6 @@ function* workerLoadRates() {
   try {
     const response = yield call(
       fetch,
-      // 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP&tsyms=USD',
       `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptos}&tsyms=USD`,
       {
         signal: controller.signal,
@@ -38,9 +37,6 @@ function* workerLoadRates() {
       const json = yield response.json();
       yield put(putRates(json['RAW']));
     }
-  } catch (e) {
-    // TODO обработка ошибок
-    console.error(e);
   } finally {
     if (yield cancelled()) {
       controller.abort();
@@ -63,9 +59,9 @@ function* workerLoadHistory() {
   const controller = new AbortController();
   yield put(setHistoryReady(false));
 
-  let response;
-
   try {
+    let response;
+
     switch (period) {
       case 1:
         response = yield call(
@@ -120,9 +116,6 @@ function* workerLoadHistory() {
       });
       yield put(putHistory(json['Data']['Data']));
     }
-  } catch (e) {
-    // TODO обработка ошибок
-    console.error(e);
   } finally {
     if (yield cancelled()) {
       controller.abort();

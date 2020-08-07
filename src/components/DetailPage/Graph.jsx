@@ -52,8 +52,6 @@ const renderCustomDay = ({ x, y, payload }) => {
 };
 
 function Graph({ period, data }) {
-  console.log(period);
-
   return (
     <Chart>
       <ResponsiveContainer height={400}>

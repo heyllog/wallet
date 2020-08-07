@@ -55,7 +55,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case PUT_HISTORY: {
-      console.log(action.payload);
       return {
         ...state,
         history: action.payload,
