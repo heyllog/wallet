@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 
 import Graph from '../components/DetailPage/Graph';
-import NotFound from '../components/NotFound';
+import ErrorPage from '../components/ErrorPage';
 import DetailCryptoList from '../components/DetailPage/DetailCryptoList';
 import ArrowBack from '../components/icons/ArrowBack';
 import {
@@ -62,7 +62,11 @@ function DetailPage() {
 
   useEffect(() => {
     if (!wallet.cryptoWallet[pageName]) {
-      return <NotFound />;
+      return (
+        <ErrorPage>
+          <p>404 Not Found</p>
+        </ErrorPage>
+      );
     }
 
     dispatch(chooseCrypto(pageName));
@@ -75,7 +79,7 @@ function DetailPage() {
     dispatch(loadHistory());
   };
 
-  return (
+  return !wallet.error ? (
     <Info>
       <Link to='/'>
         <ArrowBack />
@@ -99,6 +103,11 @@ function DetailPage() {
         </ErrorMessage>
       )}
     </Info>
+  ) : (
+    <ErrorPage>
+      <p>Server Error</p>
+      <p>Reload page, please</p>
+    </ErrorPage>
   );
 }
 

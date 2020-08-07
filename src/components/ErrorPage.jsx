@@ -6,20 +6,17 @@ const WrongRoute = styled.div`
   height: 100vh;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
-  span {
+  p {
     color: #ffffff;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 400;
   }
 `;
 
-function NotFound() {
-  return (
-    <WrongRoute>
-      <span>404 Not Found</span>
-    </WrongRoute>
-  );
+function ErrorPage({ children }) {
+  return <WrongRoute>{children}</WrongRoute>;
 }
 
-export default NotFound;
+export default ErrorPage;
