@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 
 import Graph from '../components/DetailPage/Graph';
 import NotFound from '../components/NotFound';
 import DetailCryptoList from '../components/DetailPage/DetailCryptoList';
 import ArrowBack from '../components/icons/ArrowBack';
+import {
+  cancelLoadHistory,
+  chooseCrypto,
+  loadHistory,
+  setHistoryPeriod,
+} from '../store/reducers/historyReducer';
+import Loader from '../components/DetailPage/Loader';
 
 const Info = styled.div`
   a svg {
     width: 1.8rem;
     height: 1.8rem;
     margin: 1.5rem 0 1rem 2rem;
+  }
+
+  ${Loader} {
+    margin-top: 10rem;
   }
 `;
 
@@ -34,13 +45,26 @@ const Button = styled.div`
 `;
 
 function DetailPage() {
-  const [period, setPeriod] = useState(1);
   const { name: pageName } = useParams();
+  const dispatch = useDispatch();
   const wallet = useSelector((state) => state.wallet);
+  const history = useSelector((state) => state.history);
 
   if (!wallet.cryptoWallet[pageName]) {
     return <NotFound />;
   }
+
+  useEffect(() => {
+    dispatch(chooseCrypto(pageName));
+    // dispatch(setHistoryPeriod(1));
+    dispatch(loadHistory());
+    return () => dispatch(cancelLoadHistory());
+  }, [dispatch, pageName]);
+
+  const handleClick = (value) => {
+    dispatch(setHistoryPeriod(value));
+    dispatch(loadHistory());
+  };
 
   return (
     <Info>
@@ -48,12 +72,16 @@ function DetailPage() {
         <ArrowBack />
       </Link>
       <DetailCryptoList pageName={pageName} />
-      <Buttons period={period}>
-        <Button onClick={() => setPeriod(1)}>Day</Button>
-        <Button onClick={() => setPeriod(2)}>Week</Button>
-        <Button onClick={() => setPeriod(3)}>Month</Button>
+      <Buttons period={history.period}>
+        <Button onClick={() => handleClick(1)}>Day</Button>
+        <Button onClick={() => handleClick(2)}>Week</Button>
+        <Button onClick={() => handleClick(3)}>Month</Button>
       </Buttons>
-      <Graph name={pageName} period={period} />
+      {history.readyToUse ? (
+        <Graph period={history.period} data={history.history} />
+      ) : (
+        <Loader size='12px' />
+      )}
     </Info>
   );
 }

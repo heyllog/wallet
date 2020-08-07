@@ -3,26 +3,34 @@ import EthereumIcon from '../../components/icons/EthereumIcon';
 import RippleIcon from '../../components/icons/RippleIcon';
 import LitecoinIcon from '../../components/icons/LitecoinIcon';
 
-export const LOAD_DATA = 'LOAD_DATA';
-export const CANCEL_LOAD_DATA = 'CANCEL_LOAD_DATA';
-export const PUT_DATA = 'PUT_DATA';
+export const LOAD_RATES = 'LOAD_RATES';
+export const CANCEL_LOAD_RATES = 'CANCEL_LOAD_RATES';
+export const PUT_RATES = 'PUT_RATES';
+export const SET_WALLET_READY = 'SET_WALLET_READY'
 
-export const putData = (dataFromServer) => {
+export const putRates = (dataFromServer) => {
   return {
-    type: PUT_DATA,
+    type: PUT_RATES,
     payload: dataFromServer,
   };
 };
 
-export const loadData = () => {
+export const loadRates = () => {
   return {
-    type: LOAD_DATA,
+    type: LOAD_RATES,
   };
 };
 
-export const cancelLoadData = () => {
+export const cancelLoadRates = () => {
   return {
-    type: CANCEL_LOAD_DATA,
+    type: CANCEL_LOAD_RATES,
+  };
+};
+
+export const setWalletReady = (ready) => {
+  return {
+    type: SET_WALLET_READY,
+    payload: ready,
   };
 };
 
@@ -42,7 +50,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case PUT_DATA: {
+    case PUT_RATES: {
       const dollarWallet = {};
       const changePercentage = {};
       const prices = {};
@@ -61,6 +69,11 @@ export default (state = initialState, action) => {
         readyToUse: true,
       };
     }
+    case SET_WALLET_READY:
+      return {
+        ...state,
+        readyToUse: action.payload,
+      };
     default:
       return state;
   }

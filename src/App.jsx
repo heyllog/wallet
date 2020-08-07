@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 
 import MainPage from './pages/MainPage';
 import DetailPage from './pages/DetailPage';
-import { cancelLoadData, loadData } from './store/reducers/walletReducer';
+import { cancelLoadRates, loadRates } from './store/reducers/walletReducer';
 
 const routesConfig = [
   {
@@ -45,8 +45,8 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadData());
-    return () => dispatch(cancelLoadData());
+    dispatch(loadRates());
+    return () => dispatch(cancelLoadRates());
   }, [dispatch]);
 
   return (

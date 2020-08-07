@@ -88,7 +88,7 @@ function CurrencyCard({ children: icon, name, price, coins, dollars, changes }) 
           </LeftSide>
           <RightSide>
             <h1>{wallet.readyToUse ? formatPercentage(changes) : 'Loading...'}</h1>
-            <h2>Profit/Loss</h2>
+            <h2>Profit / Loss</h2>
           </RightSide>
         </BottomSide>
       </Link>
