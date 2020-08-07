@@ -4,6 +4,7 @@ export const PUT_HISTORY = 'PUT_HISTORY';
 export const CHOOSE_CRYPTO = 'CHOOSE_CRYPTO';
 export const SET_HISTORY_READY = 'SET_HISTORY_READY';
 export const SET_HISTORY_PERIOD = 'SET_HISTORY_PERIOD';
+export const SET_HISTORY_ERROR = 'SET_HISTORY_ERROR';
 
 export const putHistory = (dataFromServer) => {
   return {
@@ -45,11 +46,19 @@ export const setHistoryPeriod = (ready) => {
   };
 };
 
+export const setHistoryError = (error) => {
+  return {
+    type: SET_HISTORY_ERROR,
+    payload: error,
+  };
+};
+
 const initialState = {
   selectedCrypto: null,
   period: 1,
   history: {},
   readyToUse: false,
+  error: false,
 };
 
 export default (state = initialState, action) => {
@@ -75,6 +84,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         period: action.payload,
+      };
+    case SET_HISTORY_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;

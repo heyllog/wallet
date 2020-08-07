@@ -13,10 +13,6 @@ const Card = styled.div`
   border: ${(props) =>
     props.active ? '2px solid rgba(69,71,84, 0)' : '2px solid rgba(69,71,84, 0.4)'};
   border-radius: 5px;
-
-  a {
-    text-decoration: none;
-  }
 `;
 
 function DetailCurrencyCard({ children: icon, name, coins, changes }) {

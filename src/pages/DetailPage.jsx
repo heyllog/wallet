@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
@@ -44,22 +44,31 @@ const Button = styled.div`
   color: #ffffff;
 `;
 
+const ErrorMessage = styled.div`
+  margin-top: 6rem;
+
+  p {
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.3rem;
+  }
+`;
+
 function DetailPage() {
   const { name: pageName } = useParams();
   const dispatch = useDispatch();
   const wallet = useSelector((state) => state.wallet);
   const history = useSelector((state) => state.history);
 
-  if (!wallet.cryptoWallet[pageName]) {
-    return <NotFound />;
-  }
-
   useEffect(() => {
+    if (!wallet.cryptoWallet[pageName]) {
+      return <NotFound />;
+    }
+
     dispatch(chooseCrypto(pageName));
-    // dispatch(setHistoryPeriod(1));
     dispatch(loadHistory());
     return () => dispatch(cancelLoadHistory());
-  }, [dispatch, pageName]);
+  }, [dispatch, pageName, wallet.cryptoWallet]);
 
   const handleClick = (value) => {
     dispatch(setHistoryPeriod(value));
@@ -77,10 +86,17 @@ function DetailPage() {
         <Button onClick={() => handleClick(2)}>Week</Button>
         <Button onClick={() => handleClick(3)}>Month</Button>
       </Buttons>
-      {history.readyToUse ? (
-        <Graph period={history.period} data={history.history} />
+      {!history.error ? (
+        history.readyToUse ? (
+          <Graph period={history.period} data={history.history} />
+        ) : (
+          <Loader size='12px' />
+        )
       ) : (
-        <Loader size='12px' />
+        <ErrorMessage>
+          <p>This information is unavailable now</p>
+          <p>Please, try again later</p>
+        </ErrorMessage>
       )}
     </Info>
   );

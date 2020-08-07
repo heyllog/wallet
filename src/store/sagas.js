@@ -9,11 +9,18 @@ import {
   cancelled,
   select,
 } from 'redux-saga/effects';
-import { LOAD_RATES, CANCEL_LOAD_RATES, putRates, setWalletReady } from './reducers/walletReducer';
+import {
+  LOAD_RATES,
+  CANCEL_LOAD_RATES,
+  putRates,
+  setWalletReady,
+  setWalletError,
+} from './reducers/walletReducer';
 import {
   CANCEL_LOAD_HISTORY,
   LOAD_HISTORY,
   putHistory,
+  setHistoryError,
   setHistoryReady,
 } from './reducers/historyReducer';
 
@@ -23,6 +30,7 @@ function* workerLoadRates() {
   cryptos = Object.keys(cryptos).join(',');
   const controller = new AbortController();
   yield put(setWalletReady(false));
+  yield put(setWalletError(false));
 
   try {
     const response = yield call(
@@ -37,6 +45,8 @@ function* workerLoadRates() {
       const json = yield response.json();
       yield put(putRates(json['RAW']));
     }
+  } catch (e) {
+    yield put(setWalletError(true));
   } finally {
     if (yield cancelled()) {
       controller.abort();
@@ -94,6 +104,7 @@ function* workerLoadHistory() {
 
     if (response.ok) {
       const json = yield response.json();
+      yield put(setHistoryError(false));
       yield json['Data']['Data'].forEach((data, index) => {
         let formattedTime;
 
@@ -116,6 +127,8 @@ function* workerLoadHistory() {
       });
       yield put(putHistory(json['Data']['Data']));
     }
+  } catch (e) {
+    yield put(setHistoryError(true));
   } finally {
     if (yield cancelled()) {
       controller.abort();

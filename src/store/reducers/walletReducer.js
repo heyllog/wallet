@@ -6,7 +6,8 @@ import LitecoinIcon from '../../components/icons/LitecoinIcon';
 export const LOAD_RATES = 'LOAD_RATES';
 export const CANCEL_LOAD_RATES = 'CANCEL_LOAD_RATES';
 export const PUT_RATES = 'PUT_RATES';
-export const SET_WALLET_READY = 'SET_WALLET_READY'
+export const SET_WALLET_READY = 'SET_WALLET_READY';
+export const SET_WALLET_ERROR = 'SET_WALLET_ERROR';
 
 export const putRates = (dataFromServer) => {
   return {
@@ -34,6 +35,13 @@ export const setWalletReady = (ready) => {
   };
 };
 
+export const setWalletError = (error) => {
+  return {
+    type: SET_WALLET_ERROR,
+    payload: error,
+  };
+};
+
 const initialState = {
   cryptos: {
     BTC: { name: { short: 'BTC', full: 'Bitcoin' }, icon: BitcoinIcon() },
@@ -46,6 +54,7 @@ const initialState = {
   prices: {},
   changePercentage: {},
   readyToUse: false,
+  error: false,
 };
 
 export default (state = initialState, action) => {
@@ -73,6 +82,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         readyToUse: action.payload,
+      };
+    case SET_WALLET_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;
